@@ -11,8 +11,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import com.github.ShinChven.util.BitmapUtil;
 
-import java.io.FileNotFoundException;
-
 
 public class MainActivity extends ActionBarActivity {
 
@@ -44,7 +42,7 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.add_image) {
             Intent intt = new Intent(Intent.ACTION_GET_CONTENT);
             intt.setType("image/*");
-            startActivityForResult(Intent.createChooser(intt, "select your atlas"), SELECT_IMAGE);
+            startActivityForResult(Intent.createChooser(intt, "Select your image from..."), SELECT_IMAGE);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -58,12 +56,13 @@ public class MainActivity extends ActionBarActivity {
                 Bitmap bitmap = BitmapUtil.zoomIn(this, data.getData(), 1000, 500);
                 Log.i(TAG, bitmap.getWidth() + " " + bitmap.getHeight());
                 mImage.setImageBitmap(bitmap);
-            } catch (FileNotFoundException e1) {
-                e1.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } catch (OutOfMemoryError e) {
+                e.printStackTrace();
+                Toast.makeText(this, "OOM", Toast.LENGTH_SHORT).show();
             }
         }
-//        Bitmap bmp= BitmapFactory.de
-
         super.onActivityResult(requestCode, resultCode, data);
     }
 
